@@ -10,7 +10,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
-import { Joosik, joosikSvg, type Mood } from "@/components/studio/joosik";
+import { JOOSIK_BBOX, JOOSIK_SRC, JoosikImg } from "@/components/studio/joosik-img";
 import { SEED_BY_CODE, STOCK_SEEDS } from "@/lib/data/stocks";
 import { US_INDEX_FALLBACK, US_INSTRUMENTS, US_TICKERS } from "@/lib/data/us-markets";
 import { num, pct } from "@/lib/format";
@@ -172,7 +172,7 @@ export function StudioContent() {
       ? { l: label, r: `${fmtIdx(i.value)} ${pct(i.changePct)}`, tone: toneOf(i.changePct) }
       : { l: label, r: "—" };
 
-  const krTone: Mood = toneOf(kospi?.changePct ?? 0);
+  const krTone: Tone = toneOf(kospi?.changePct ?? 0);
   const headline =
     krTone === "up" ? S.headlineUp : krTone === "down" ? S.headlineDown : S.headlineFlat;
   const volatile = Math.abs(kospi?.changePct ?? 0) >= 2 || Math.abs(nasdaq?.changePct ?? 0) >= 2;
@@ -313,11 +313,22 @@ export function StudioContent() {
     }
 
     try {
-      const bs = slide.big ? 360 : 168;
+      const dh = slide.big ? 420 : 230;
+      const dw = (dh * JOOSIK_BBOX.sw) / JOOSIK_BBOX.sh;
       const bird = new Image();
-      bird.src = `data:image/svg+xml;utf8,${encodeURIComponent(joosikSvg(bs, krTone))}`;
+      bird.src = JOOSIK_SRC;
       await bird.decode();
-      ctx.drawImage(bird, W - bs - 56, H - bs - 132, bs, bs);
+      ctx.drawImage(
+        bird,
+        JOOSIK_BBOX.sx,
+        JOOSIK_BBOX.sy,
+        JOOSIK_BBOX.sw,
+        JOOSIK_BBOX.sh,
+        W - dw - 56,
+        H - dh - 124,
+        dw,
+        dh,
+      );
     } catch {}
 
     ctx.textAlign = "left";
@@ -356,7 +367,7 @@ export function StudioContent() {
             </h1>
             <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{S.subtitle}</p>
             <div className="mt-3 flex items-center gap-2">
-              <Joosik size={48} mood={krTone} />
+              <JoosikImg height={56} />
               <div>
                 <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
                 <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
@@ -488,7 +499,7 @@ export function StudioContent() {
                     className="pointer-events-none absolute opacity-95"
                     style={s.big ? { bottom: 6, right: 6 } : { top: 8, right: 8 }}
                   >
-                    <Joosik size={s.big ? 56 : 24} mood={krTone} />
+                    <JoosikImg height={s.big ? 64 : 30} />
                   </div>
                   <div>
                     <div className="h-1 w-8 rounded bg-[var(--color-accent)]" aria-hidden />
