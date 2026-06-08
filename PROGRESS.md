@@ -12,6 +12,16 @@ Key added to `.env.local` (gitignored) and dev server restarted. **Real financia
 Note: the key was shared in chat; it can be re-issued at opendart.fss.or.kr if desired (read-only,
 rate-limited data — low risk).
 
+## Global fix + domain + GitHub (2026-06-08)
+- **Global US bug fixed:** US index/FX strip had no fallback (KR did), so it rendered blank until the
+  client poll resolved. Added `US_INDEX_FALLBACK` (labeled sample) + passed to `LiveIndexBar`. Now US
+  cards (NASDAQ/S&P/Dow/Russell/USD-KRW) render instantly then update to live. API was already live.
+- **GitHub (public):** https://github.com/diligentlee2007-bot/alpha-radar-fundamentals (committed + pushed;
+  `.env.local`/`.vercel` gitignored — no secrets).
+- **Pretty public URL:** renamed Vercel project → **https://alpha-radar-fundamentals.vercel.app**.
+  Disabled Vercel Deployment Protection (ssoProtection=null via API) so the portfolio URL is public.
+  Verified: all routes 200, Samsung "OpenDART 재무" live, US cards render.
+
 ## Steps 1–3 (2026-06-08, autonomous)
 - **#1 Expanded live coverage:** downloaded OpenDART's official corpCode master (zip → CORPCODE.xml),
   matched **all 42 seed tickers** to authoritative corp_codes, wrote them into `dart-corp-codes.ts`

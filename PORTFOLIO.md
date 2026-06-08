@@ -1,6 +1,7 @@
 # Alpha Radar Fundamentals — Portfolio Write-up (KO / EN)
 
-> Live demo: **https://kr-stock-dashboard-pi.vercel.app**
+> Live demo: **https://alpha-radar-fundamentals.vercel.app**
+> Source: **https://github.com/diligentlee2007-bot/alpha-radar-fundamentals**
 > Educational portfolio project. Not investment advice.
 
 ---
