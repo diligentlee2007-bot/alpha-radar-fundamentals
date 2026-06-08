@@ -376,6 +376,12 @@ const en = {
     riskVol: "Volatility is elevated — manage risk and avoid chasing moves.",
     disclaimer: "Educational content · not investment advice · data delayed.",
     brand: "Alpha Radar Fundamentals",
+    aiTitle: "AI illustration card (beta)",
+    aiNote:
+      "App cards can't draw bespoke scenes — that needs an image AI. Paste this prompt into ChatGPT (DALL·E), Midjourney, or Canva AI to make today's scene, then add the headline in Canva. Keep the character line so the same bull appears every day.",
+    promptLabel: "Image prompt → paste into your image AI",
+    overlayLabel: "Headline to overlay",
+    copyPrompt: "Copy prompt",
     bird: { name: "주식이 (Joosik)", tagline: "Your daily market buddy" },
   },
   finalCta: {
@@ -768,6 +774,12 @@ const ko: Dict = {
     riskVol: "변동성 확대 — 리스크 관리, 추격 매매 주의.",
     disclaimer: "교육용 콘텐츠 · 투자 자문 아님 · 시세 지연.",
     brand: "Alpha Radar Fundamentals",
+    aiTitle: "AI 일러스트 카드 (베타)",
+    aiNote:
+      "앱은 매번 다른 장면 그림을 자동으로 못 그려요 — 그건 이미지 AI가 필요해요. 이 프롬프트를 ChatGPT(DALL·E)·미드저니·Canva AI에 붙여 오늘의 장면을 만들고, Canva에서 헤드라인을 얹으세요. 캐릭터 설명은 그대로 둬야 매일 같은 황소가 나와요.",
+    promptLabel: "이미지 프롬프트 → 이미지 AI에 붙여넣기",
+    overlayLabel: "카드에 올릴 헤드라인",
+    copyPrompt: "프롬프트 복사",
     bird: { name: "주식이", tagline: "매일 아침 시장을 알려주는 친구" },
   },
   finalCta: {

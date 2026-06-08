@@ -19,7 +19,7 @@ import { useLiveQuotes } from "@/lib/hooks/use-live-quotes";
 import { useNews } from "@/lib/hooks/use-news";
 import { useUsQuotes } from "@/lib/hooks/use-us-quotes";
 import { useI18n } from "@/lib/i18n/context";
-import { type Decor, sceneOf, THEMES } from "@/lib/studio/scene";
+import { type Decor, JOOSIK_DESC, STYLE_DESC, sceneOf, THEMES } from "@/lib/studio/scene";
 import type { IndexQuote } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -309,6 +309,11 @@ export function StudioContent() {
       : "#stocks #investing #KOSPI #Nasdaq #markets #finance #AlphaRadar";
   const caption = `${today} ${lang === "ko" ? "한국·미국 시장 한 줄 요약" : "Korea & US market in one line"}\n${headline}\n\n${news[0] ? `📰 ${trunc(news[0].title, 80)}\n\n` : ""}${S.disclaimer}\n\n${hashtags}`;
 
+  // AI illustration prompt — paste into an image AI to get a bespoke scene card.
+  const enCtx = `Korea KOSPI ${kospi ? pct(kospi.changePct) : "n/a"}, US Nasdaq ${nasdaq ? pct(nasdaq.changePct) : "n/a"}${news[0] ? `; top story: ${news[0].title}` : ""}`;
+  const imagePrompt = `Illustrate ${JOOSIK_DESC}, ${THEMES[sceneOf(kospi?.changePct ?? 0)].prompt}. ${STYLE_DESC}. Context: ${enCtx}. Important: do NOT draw any letters or text in the image — text is added separately.`;
+  const overlayText = `${headline}\n코스피 ${kospi ? pct(kospi.changePct) : "—"} · 나스닥 ${nasdaq ? pct(nasdaq.changePct) : "—"}${news[0] ? `\n📰 ${trunc(news[0].title, 56)}` : ""}`;
+
   async function downloadPng(slide: Slide, i: number) {
     const W = 1080;
     const H = 1350;
@@ -462,6 +467,35 @@ export function StudioContent() {
         <p className="mt-5 rounded-[var(--radius-sm)] border border-[var(--color-accent-100)] bg-[var(--color-accent-50)] p-3 text-xs leading-relaxed text-[var(--color-accent-700)]">
           {S.humanInLoop}
         </p>
+      </Reveal>
+
+      <Reveal>
+        <div className="mt-6 rounded-[var(--radius)] border border-[var(--color-accent-200)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-soft)]">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[var(--color-fg-strong)]">
+              <SparkleIcon
+                weight="fill"
+                className="size-4 text-[var(--color-accent-700)]"
+                aria-hidden
+              />
+              {S.aiTitle}
+            </h2>
+            <CopyButton text={imagePrompt} label={S.copyPrompt} done={S.copied} />
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--color-muted)]">{S.aiNote}</p>
+          <p className="mt-3 text-xs font-semibold text-[var(--color-accent-700)]">
+            {S.promptLabel}
+          </p>
+          <pre className="mt-1 whitespace-pre-wrap break-words rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-bg)] p-3 font-sans text-xs leading-relaxed text-[var(--color-fg)]">
+            {imagePrompt}
+          </pre>
+          <p className="mt-3 text-xs font-semibold text-[var(--color-accent-700)]">
+            {S.overlayLabel}
+          </p>
+          <pre className="mt-1 whitespace-pre-wrap break-words rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-bg)] p-3 font-sans text-xs leading-relaxed text-[var(--color-muted)]">
+            {overlayText}
+          </pre>
+        </div>
       </Reveal>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_minmax(320px,400px)]">
