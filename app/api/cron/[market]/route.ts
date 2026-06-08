@@ -16,7 +16,7 @@ import { resendConfigured, sendEmail } from "@/lib/email/resend";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 const REPORT_TO = process.env.REPORT_TO?.trim() || "diligentlee2007@gmail.com";
 

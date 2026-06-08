@@ -5,6 +5,7 @@
  * live-data fetchers. Falls back gracefully and labels everything educational.
  */
 
+import { generateScene, illustrationConfigured } from "@/lib/cards/illustrate";
 import type { CardSpec, Tone } from "@/lib/cards/render";
 import { FEATURED_CODES } from "@/lib/data/fundamentals";
 import {
@@ -104,12 +105,17 @@ export async function buildKrCards(origin: string): Promise<CardSpec[]> {
   const headline = news[0]?.title;
   const pageCount = 5;
   const base = { origin, pageCount };
+  const coverB64 = illustrationConfigured()
+    ? await generateScene(scene, { quality: "high" })
+    : null;
+  const coverUrl = coverB64 ? `data:image/png;base64,${coverB64}` : undefined;
 
   return [
     {
       ...base,
       scene,
       page: 1,
+      bgImageUrl: coverUrl,
       kicker: `오늘의 한국 증시 · ${date}`,
       title:
         kp <= -1.5
@@ -239,12 +245,17 @@ export async function buildUsCards(origin: string): Promise<CardSpec[]> {
   const headline = news[0]?.title;
   const pageCount = 5;
   const base = { origin, pageCount };
+  const coverB64 = illustrationConfigured()
+    ? await generateScene(scene, { quality: "high" })
+    : null;
+  const coverUrl = coverB64 ? `data:image/png;base64,${coverB64}` : undefined;
 
   return [
     {
       ...base,
       scene,
       page: 1,
+      bgImageUrl: coverUrl,
       kicker: `미국 증시 마감 · ${date}`,
       title:
         np <= -1.5

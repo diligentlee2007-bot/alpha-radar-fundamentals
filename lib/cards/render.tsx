@@ -39,6 +39,10 @@ export interface CardSpec {
   pageCount?: number;
   /** Absolute origin to load the mascot PNG from (e.g. http://localhost:3000). */
   origin: string;
+  /** Optional AI-generated scene as a full-bleed background (data: URL). When
+   *  set, the card composites text over the illustration (no flat gradient /
+   *  no mascot sticker — the bull is already in the illustration). */
+  bgImageUrl?: string;
 }
 
 const UP = "#34d399";
@@ -134,6 +138,7 @@ function CardEl(c: CardSpec): React.ReactElement {
   const MH = 360; // displayed mascot height
   const k = MH / BB.sh;
   const mascotUrl = `${c.origin}${t.char}`;
+  const illustrated = !!c.bgImageUrl;
   return (
     <div
       style={{
@@ -143,13 +148,48 @@ function CardEl(c: CardSpec): React.ReactElement {
         flexDirection: "column",
         position: "relative",
         padding: 72,
-        backgroundImage: `linear-gradient(155deg, ${t.css[0]}, ${t.css[1]} 52%, ${t.css[2]})`,
+        backgroundColor: t.css[2],
+        backgroundImage: illustrated
+          ? undefined
+          : `linear-gradient(155deg, ${t.css[0]}, ${t.css[1]} 52%, ${t.css[2]})`,
         color: "#f8fafc",
         fontFamily: "Pretendard",
         overflow: "hidden",
       }}
     >
-      {decor(c.scene)}
+      {illustrated ? (
+        <>
+          {/* biome-ignore lint/performance/noImgElement: og renderer requires raw img */}
+          <img
+            src={c.bgImageUrl}
+            width={CARD_W}
+            height={CARD_H}
+            alt=""
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: CARD_W,
+              height: CARD_H,
+              objectFit: "cover",
+            }}
+          />
+          {/* scrim for headline/footer legibility */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: CARD_W,
+              height: CARD_H,
+              backgroundImage:
+                "linear-gradient(180deg, rgba(8,11,20,0.74) 0%, rgba(8,11,20,0.30) 30%, rgba(8,11,20,0.05) 50%, rgba(8,11,20,0.55) 100%)",
+            }}
+          />
+        </>
+      ) : (
+        decor(c.scene)
+      )}
       {/* accent rail */}
       <div
         style={{
@@ -190,6 +230,7 @@ function CardEl(c: CardSpec): React.ReactElement {
           letterSpacing: -2,
           maxWidth: 880,
           display: "flex",
+          textShadow: illustrated ? "0 3px 22px rgba(0,0,0,0.62)" : "none",
         }}
       >
         {c.title}
@@ -205,6 +246,7 @@ function CardEl(c: CardSpec): React.ReactElement {
             letterSpacing: -2,
             color: toneColor(c.bigStat.tone),
             display: "flex",
+            textShadow: illustrated ? "0 3px 22px rgba(0,0,0,0.62)" : "none",
           }}
         >
           {c.bigStat.text}
@@ -264,29 +306,32 @@ function CardEl(c: CardSpec): React.ReactElement {
         </div>
       ) : null}
 
-      {/* mascot bottom-right (cropped to head & torso, framed as a sticker) */}
-      <div
-        style={{
-          position: "absolute",
-          right: 60,
-          bottom: 150,
-          width: BB.sw * k,
-          height: MH,
-          overflow: "hidden",
-          display: "flex",
-          borderRadius: 30,
-          border: "1px solid rgba(148,163,184,0.22)",
-        }}
-      >
-        {/* biome-ignore lint/performance/noImgElement: og renderer requires raw img */}
-        <img
-          src={mascotUrl}
-          width={840 * k}
-          height={960 * k}
-          alt=""
-          style={{ position: "absolute", left: -(BB.sx * k), top: -(BB.sy * k) }}
-        />
-      </div>
+      {/* mascot bottom-right (cropped to head & torso, framed as a sticker) —
+          only on flat designed cards; illustrated covers already contain the bull */}
+      {illustrated ? null : (
+        <div
+          style={{
+            position: "absolute",
+            right: 60,
+            bottom: 150,
+            width: BB.sw * k,
+            height: MH,
+            overflow: "hidden",
+            display: "flex",
+            borderRadius: 30,
+            border: "1px solid rgba(148,163,184,0.22)",
+          }}
+        >
+          {/* biome-ignore lint/performance/noImgElement: og renderer requires raw img */}
+          <img
+            src={mascotUrl}
+            width={840 * k}
+            height={960 * k}
+            alt=""
+            style={{ position: "absolute", left: -(BB.sx * k), top: -(BB.sy * k) }}
+          />
+        </div>
+      )}
 
       {/* footer */}
       <div
