@@ -19,6 +19,7 @@ import { useLiveQuotes } from "@/lib/hooks/use-live-quotes";
 import { useNews } from "@/lib/hooks/use-news";
 import { useUsQuotes } from "@/lib/hooks/use-us-quotes";
 import { useI18n } from "@/lib/i18n/context";
+import { type Decor, sceneOf, THEMES } from "@/lib/studio/scene";
 import type { IndexQuote } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -89,6 +90,69 @@ function roundRect(
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
   }
+}
+
+function drawRocket(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
+  ctx.save();
+  ctx.fillStyle = "#fbbf24";
+  ctx.beginPath();
+  ctx.moveTo(cx - 11, cy + 44);
+  ctx.lineTo(cx, cy + 72);
+  ctx.lineTo(cx + 11, cy + 44);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#e5e7eb";
+  roundRect(ctx, cx - 17, cy - 28, 34, 76, 16);
+  ctx.fill();
+  ctx.fillStyle = "#34d399";
+  ctx.beginPath();
+  ctx.moveTo(cx - 17, cy - 18);
+  ctx.lineTo(cx, cy - 48);
+  ctx.lineTo(cx + 17, cy - 18);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#0ea5e9";
+  ctx.beginPath();
+  ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#34d399";
+  for (const s of [-1, 1]) {
+    ctx.beginPath();
+    ctx.moveTo(cx + 17 * s, cy + 30);
+    ctx.lineTo(cx + 31 * s, cy + 50);
+    ctx.lineTo(cx + 17 * s, cy + 46);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawDecor(ctx: CanvasRenderingContext2D, decor: Decor, W: number, H: number) {
+  if (decor === "none") return;
+  ctx.save();
+  if (decor === "stars" || decor === "rocket") {
+    for (let i = 0; i < 46; i++) {
+      const x = (i * 97 * 7) % W;
+      const y = 40 + ((i * 53 * 11) % Math.floor(H * 0.52));
+      ctx.fillStyle = `rgba(255,255,255,${0.12 + (i % 4) * 0.07})`;
+      ctx.beginPath();
+      ctx.arc(x, y, (i % 3) * 0.8 + 0.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    if (decor === "rocket") drawRocket(ctx, Math.round(W * 0.72), 235);
+  } else if (decor === "rain") {
+    ctx.strokeStyle = "rgba(147,197,253,0.22)";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 72; i++) {
+      const x = (i * 131 * 5) % W;
+      const y = (i * 71 * 7) % Math.floor(H * 0.92);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - 8, y + 22);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
 
 function wrap(
@@ -178,6 +242,9 @@ export function StudioContent() {
   const volatile = Math.abs(kospi?.changePct ?? 0) >= 2 || Math.abs(nasdaq?.changePct ?? 0) >= 2;
   const riskLine = volatile ? S.riskVol : S.riskCalm;
 
+  // Daily theme — background, accent, decor & 주식이 mood follow the market.
+  const T = THEMES[sceneOf(kospi?.changePct ?? 0)];
+
   const newsRows: Row[] = news.length
     ? news
         .slice(0, 3)
@@ -255,16 +322,17 @@ export function StudioContent() {
     } catch {}
 
     const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, "#19241f");
-    bg.addColorStop(0.5, "#15171c");
-    bg.addColorStop(1, "#101216");
+    bg.addColorStop(0, T.canvas[0]);
+    bg.addColorStop(0.5, T.canvas[1]);
+    bg.addColorStop(1, T.canvas[2]);
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
     const glow = ctx.createRadialGradient(560, 40, 0, 560, 40, 720);
-    glow.addColorStop(0, "rgba(52,211,153,0.20)");
-    glow.addColorStop(1, "rgba(52,211,153,0)");
+    glow.addColorStop(0, `${T.accent}33`);
+    glow.addColorStop(1, `${T.accent}00`);
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, W, 560);
+    drawDecor(ctx, T.decor, W, H);
 
     ctx.textAlign = "left";
     ctx.fillStyle = "#9aa4b2";
@@ -276,10 +344,10 @@ export function StudioContent() {
     ctx.fillText(today, W - 80, 92);
     ctx.textAlign = "left";
 
-    ctx.fillStyle = "#34d399";
+    ctx.fillStyle = T.accent;
     roundRect(ctx, 80, 132, 72, 9, 4);
     ctx.fill();
-    ctx.fillStyle = "#34d399";
+    ctx.fillStyle = T.accent;
     ctx.font = '800 30px Inter, "Noto Sans KR", sans-serif';
     ctx.fillText(slide.kicker.toUpperCase(), 80, 200);
 
@@ -494,7 +562,12 @@ export function StudioContent() {
           <div className="print-carousel grid grid-cols-2 gap-4 sm:grid-cols-3">
             {slides.map((s, i) => (
               <div key={s.kicker} className="flex flex-col">
-                <div className="relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface-2)] to-[var(--color-bg)] p-4">
+                <div
+                  className="relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] p-4"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom, ${T.css[0]}, ${T.css[1]}, ${T.css[2]})`,
+                  }}
+                >
                   <div
                     className="pointer-events-none absolute opacity-95"
                     style={s.big ? { bottom: 6, right: 6 } : { top: 8, right: 8 }}
@@ -502,7 +575,7 @@ export function StudioContent() {
                     <JoosikImg height={s.big ? 64 : 30} />
                   </div>
                   <div>
-                    <div className="h-1 w-8 rounded bg-[var(--color-accent)]" aria-hidden />
+                    <div className="h-1 w-8 rounded" style={{ background: T.accent }} aria-hidden />
                     <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-700)]">
                       {s.kicker}
                     </p>
