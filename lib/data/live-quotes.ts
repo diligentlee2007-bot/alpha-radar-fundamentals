@@ -335,6 +335,71 @@ export async function getSymbolQuotes(symbols: string[]): Promise<LiveResult> {
   return packQuotes(results, now);
 }
 
+// ---- Overnight news headlines (free Yahoo search) -------------------------
+
+export interface NewsItem {
+  symbol: string;
+  title: string;
+  publisher: string;
+  link: string;
+  time: number; // epoch ms
+}
+
+const newsCache = new Map<string, { items: NewsItem[]; at: number }>();
+const NEWS_TTL_MS = 300_000;
+
+async function fetchNews(symbol: string, now: number): Promise<NewsItem[]> {
+  const cached = newsCache.get(symbol);
+  if (cached && now - cached.at < NEWS_TTL_MS) return cached.items;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(
+      `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&newsCount=4&quotesCount=0&enableFuzzyQuery=false`,
+      {
+        signal: controller.signal,
+        headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
+        cache: "no-store",
+      },
+    );
+    if (!res.ok) return cached?.items ?? [];
+    const json = (await res.json()) as {
+      news?: { title?: string; publisher?: string; link?: string; providerPublishTime?: number }[];
+    };
+    const items: NewsItem[] = (json.news ?? [])
+      .filter((n) => n.title && n.link)
+      .slice(0, 2)
+      .map((n) => ({
+        symbol,
+        title: n.title as string,
+        publisher: n.publisher ?? "",
+        link: n.link as string,
+        time: (n.providerPublishTime ?? 0) * 1000,
+      }));
+    newsCache.set(symbol, { items, at: now });
+    return items;
+  } catch {
+    return cached?.items ?? [];
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+/** Aggregate recent headlines for the given symbols (deduped, newest first). */
+export async function getNews(symbols: string[]): Promise<NewsItem[]> {
+  const now = Date.now();
+  const lists = await Promise.all(symbols.slice(0, 6).map((s) => fetchNews(s, now)));
+  const seen = new Set<string>();
+  const out: NewsItem[] = [];
+  for (const item of lists.flat().sort((a, b) => b.time - a.time)) {
+    if (seen.has(item.title)) continue;
+    seen.add(item.title);
+    out.push(item);
+    if (out.length >= 5) break;
+  }
+  return out;
+}
+
 function packQuotes(results: (LiveQuote | null)[], now: number): LiveResult {
   const quotes: Record<string, LiveQuote> = {};
   for (const q of results) {
