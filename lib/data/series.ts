@@ -116,7 +116,7 @@ function intradayBars(seed: StockSeed): Bar[] {
       h: tick(hh),
       l: tick(ll),
       c: tick(c),
-      v: Math.round((seed.sharesOut * 0.00003) * (0.5 + rng())),
+      v: Math.round(seed.sharesOut * 0.00003 * (0.5 + rng())),
     });
     price = c;
   }

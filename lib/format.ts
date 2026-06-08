@@ -1,5 +1,7 @@
 /** KRW / number / percent formatters. All locale-stable (ko-KR) and SSR-safe. */
 
+import type { Lang } from "@/lib/i18n/dict";
+
 const krw = new Intl.NumberFormat("ko-KR");
 
 /** Plain integer with thousands separators: 74800 → "74,800". */
@@ -43,4 +45,24 @@ export function volume(n: number): string {
 /** Direction helper: 1 up, -1 down, 0 flat. */
 export function dir(n: number): 1 | -1 | 0 {
   return n > 0 ? 1 : n < 0 ? -1 : 0;
+}
+
+/** Bilingual compact KRW money: KO uses 조/억, EN uses ₩tn/bn (of KRW). */
+export function moneyKR(n: number, lang: Lang): string {
+  const abs = Math.abs(n);
+  if (lang === "ko") {
+    if (abs >= 1_0000_0000_0000) return `${(n / 1_0000_0000_0000).toFixed(1)}조원`;
+    if (abs >= 1_0000_0000) return `${Math.round(n / 1_0000_0000).toLocaleString("ko-KR")}억원`;
+    if (abs >= 1_0000) return `${Math.round(n / 1_0000).toLocaleString("ko-KR")}만원`;
+    return `${krw.format(Math.round(n))}원`;
+  }
+  if (abs >= 1e12) return `₩${(n / 1e12).toFixed(1)}tn`;
+  if (abs >= 1e9) return `₩${(n / 1e9).toFixed(1)}bn`;
+  if (abs >= 1e6) return `₩${(n / 1e6).toFixed(1)}mn`;
+  return `₩${krw.format(Math.round(n))}`;
+}
+
+/** Ratio with fixed decimals + optional suffix. */
+export function ratio(n: number, digits = 1, suffix = ""): string {
+  return `${n.toFixed(digits)}${suffix}`;
 }

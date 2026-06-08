@@ -59,6 +59,7 @@ export const IndexQuoteSchema = z.object({
   changePct: z.number(),
   spark: z.array(z.number()),
   unit: z.string(), // "" for points, "원" for FX
+  source: z.enum(["live", "sample"]).optional(),
 });
 export type IndexQuote = z.infer<typeof IndexQuoteSchema>;
 

@@ -1,47 +1,47 @@
 /* ---------------------------------------------------------------------------
-   KR Stock Dashboard — design tokens (Tailwind v4, CSS-first @theme).
-   Light mode only. One accent + neutral slate scale (~90% of UI).
-   Korean market convention: 상승=빨강(up), 하락=파랑(down), 보합=중립(flat).
+   Alpha Radar — design tokens (Tailwind v4, CSS-first @theme).
+   Dark premium fintech. One emerald accent + a cool slate neutral scale.
+   Market direction (international): up=green, down=red, flat=muted.
 --------------------------------------------------------------------------- */
 
 @import "tailwindcss";
 
 @theme {
-  /* ---- ONE accent: refined indigo-blue ---- */
-  --color-accent-50: oklch(0.97 0.02 264);
-  --color-accent-100: oklch(0.93 0.05 264);
-  --color-accent-200: oklch(0.87 0.09 264);
-  --color-accent-400: oklch(0.68 0.16 264);
-  --color-accent: oklch(0.58 0.19 264); /* primary */
-  --color-accent-600: oklch(0.5 0.19 264);
-  --color-accent-700: oklch(0.42 0.17 264);
+  /* ---- Brand accent: refined emerald/teal ---- */
+  --color-accent-50: oklch(0.27 0.04 168); /* dark translucent chip bg */
+  --color-accent-100: oklch(0.33 0.06 168); /* chip border */
+  --color-accent-200: oklch(0.42 0.09 168);
+  --color-accent-400: oklch(0.66 0.13 168);
+  --color-accent: oklch(0.74 0.14 168); /* primary buttons / brand mark */
+  --color-accent-600: oklch(0.7 0.14 168); /* hover */
+  --color-accent-700: oklch(0.83 0.11 168); /* accent TEXT on dark */
 
-  /* ---- Market direction (KR convention) ---- */
-  --color-up: oklch(0.6 0.2 25); /* 상승 — red */
-  --color-up-soft: oklch(0.95 0.04 25);
-  --color-down: oklch(0.58 0.16 250); /* 하락 — blue */
-  --color-down-soft: oklch(0.95 0.03 250);
-  --color-flat: oklch(0.6 0.01 264); /* 보합 — neutral */
+  /* ---- Market direction ---- */
+  --color-up: oklch(0.78 0.15 158); /* gains — green */
+  --color-up-soft: oklch(0.3 0.05 158);
+  --color-down: oklch(0.68 0.18 22); /* losses — red */
+  --color-down-soft: oklch(0.32 0.06 22);
+  --color-flat: oklch(0.66 0.02 255);
 
   /* ---- Semantic icon colors (Phosphor) ---- */
-  --color-info: oklch(0.62 0.16 250);
-  --color-success: oklch(0.65 0.16 150);
-  --color-warning: oklch(0.78 0.15 80);
-  --color-danger: oklch(0.62 0.2 25);
+  --color-info: oklch(0.74 0.13 240);
+  --color-success: oklch(0.78 0.15 158);
+  --color-warning: oklch(0.82 0.14 80);
+  --color-danger: oklch(0.7 0.18 22);
 
-  /* ---- Neutral scale (cool slate) ---- */
-  --color-bg: oklch(0.99 0.002 264);
-  --color-surface: oklch(1 0 0);
-  --color-surface-2: oklch(0.975 0.004 264);
-  --color-border: oklch(0.92 0.005 264);
-  --color-border-strong: oklch(0.86 0.008 264);
-  --color-muted: oklch(0.54 0.015 264);
-  --color-fg: oklch(0.27 0.02 264);
-  --color-fg-strong: oklch(0.17 0.02 264);
+  /* ---- Neutral scale (cool slate, dark) ---- */
+  --color-bg: oklch(0.17 0.012 256);
+  --color-surface: oklch(0.21 0.014 256);
+  --color-surface-2: oklch(0.25 0.015 256);
+  --color-border: oklch(0.29 0.014 256);
+  --color-border-strong: oklch(0.37 0.018 256);
+  --color-muted: oklch(0.68 0.018 256);
+  --color-fg: oklch(0.93 0.008 256);
+  --color-fg-strong: oklch(0.98 0.004 256);
 
   /* ---- Fonts ---- */
-  --font-sans: var(--font-noto), system-ui, sans-serif;
-  --font-display: var(--font-noto), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-noto), system-ui, sans-serif;
+  --font-display: var(--font-inter), var(--font-noto), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* ---- Type scale ---- */
@@ -54,6 +54,7 @@
   --text-3xl: 2.25rem;
   --text-4xl: 3rem;
   --text-5xl: 3.75rem;
+  --text-6xl: 4.5rem;
 
   /* ---- 8px grid ---- */
   --spacing: 0.25rem;
@@ -62,9 +63,11 @@
   --radius-sm: 0.5rem;
   --radius: 0.875rem;
   --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
 
-  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.04), 0 8px 24px oklch(0 0 0 / 0.05);
-  --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.05), 0 16px 48px oklch(0 0 0 / 0.09);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 30px oklch(0 0 0 / 0.35);
+  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.4), 0 24px 60px oklch(0 0 0 / 0.5);
+  --shadow-glow: 0 0 0 1px oklch(0.74 0.14 168 / 0.2), 0 16px 50px oklch(0.74 0.14 168 / 0.12);
 }
 
 @layer base {
@@ -82,18 +85,28 @@
   h4 {
     font-family: var(--font-display);
     color: var(--color-fg-strong);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 
-  /* Numbers align cleanly across rows */
   .tnum {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
   }
 
   ::selection {
-    background: var(--color-accent-100);
-    color: var(--color-accent-700);
+    background: var(--color-accent-200);
+    color: var(--color-fg-strong);
+  }
+
+  /* Custom scrollbar (subtle, dark) */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 999px;
+    border: 2px solid var(--color-bg);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -110,5 +123,45 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Subtle glass panel for premium dark cards */
+  .glass {
+    background: color-mix(in oklch, var(--color-surface) 78%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Emerald gradient text for accents in headlines */
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-fg-strong) 0%,
+      var(--color-accent-700) 60%,
+      var(--color-accent) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hero ambient glow */
+  .radial-glow {
+    background:
+      radial-gradient(60% 50% at 50% 0%, oklch(0.74 0.14 168 / 0.16) 0%, transparent 70%),
+      radial-gradient(40% 40% at 85% 10%, oklch(0.6 0.12 250 / 0.12) 0%, transparent 70%);
+  }
+
+  /* Faint grid backdrop */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
   }
 }

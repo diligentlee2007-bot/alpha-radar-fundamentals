@@ -1,40 +1,54 @@
-# SPEC — KR Stock Dashboard (한국 주식 대시보드)
+# SPEC — Alpha Radar Fundamentals
 
-> No spec file was provided (`[SPEC파일명]` was an unfilled placeholder). This spec is
-> **inferred from the project name `kr-stock-dashboard`** and recorded here so the
-> autonomous build has a fixed target. If the real spec arrives, reconcile against this.
+> Folder name is `kr-stock-dashboard` (legacy). The product is **Alpha Radar Fundamentals**,
+> a premium **Korean equity research terminal**. (Earlier Media Studio idea is now a future-only
+> roadmap card.)
 
-## 목적 (Purpose)
-한국 주식 시장(KOSPI / KOSDAQ)을 한눈에 보는 **프리미엄 대시보드** 웹앱.
-지수, 주요 종목, 등락률 상위, 섹터 히트맵, 개별 종목 상세 차트, 관심종목(워치리스트)을
-빠르고 깔끔하게 보여준다.
+## Purpose
+A premium, portfolio-grade fintech **research terminal** for analysing Korean listed companies:
+core financial ratios, three-year trends, sector-relative valuation, and a plain-language risk
+summary. **OpenDART-ready** (live key seam) with a clearly-labeled deterministic **sample mode**.
+**Education / portfolio only — not investment advice.** Persistent disclaimers throughout.
 
-## 대상 사용자 (Target users)
-- 국내 주식에 관심 있는 개인 투자자
-- 시장 현황을 빠르게 스캔하고 싶은 사용자
-- 한글 가독성과 모바일 사용성이 중요한 한국 사용자
+## Target users (portfolio audience)
+Finance / securities / consulting reviewers evaluating whether the author can plan, build,
+verify, and present a useful Korean equity research tool — combining finance thinking,
+AI-assisted coding, automation, and honest data handling.
 
-## 핵심 기능 (Core features)
-1. **시장 개요 바** — KOSPI, KOSDAQ, KOSPI200, USD/KRW 실시간형 카드 (등락 색상)
-2. **마켓 무버스** — 상승률/하락률/거래대금 상위 종목
-3. **종목 리스트 테이블** — 종목명/코드/현재가/등락/거래량 + 스파크라인, 정렬·검색
-4. **개별 종목 상세** — 가격 차트(기간 토글: 1D/1W/1M/3M/1Y), 핵심 지표, 기업 정보
-5. **섹터 히트맵** — 업종별 등락 시각화
-6. **관심종목(워치리스트)** — localStorage 저장, 추가/삭제
-7. **다크/라이트** — 기본 라이트 (스킬 규칙). 데이터 색상은 한국 관습(상승=빨강, 하락=파랑)
+## Core value
+Per company: 3-year financial statements (revenue / operating profit / net income), 12+ ratios
+(ROE, ROA, margins, debt ratio, current ratio, EPS, BPS, PER, PBR, dividend yield, revenue
+growth), valuation vs sector average, and mechanical risk flags.
 
-## 데이터 (Data)
-- 실데이터 API(한국투자증권/네이버/KRX)는 **API 키·인증 필요 → 자율 실행 중 사용 불가**.
-- 따라서 **현실적인 시드/목 데이터 레이어**를 `lib/` 에 서비스 인터페이스로 추상화.
-  - 실제 종목명/코드 사용 (삼성전자 005930, SK하이닉스 000660 등)
-  - 결정론적 시계열 생성기로 차트/스파크라인용 OHLC·종가 시리즈 생성
-  - 추후 실 API를 동일 인터페이스로 교체 가능하도록 설계
-- 데이터는 Next.js Route Handler(`/api/...`)로 서빙 → 실 API 전환 시 핸들러만 교체.
+## Surfaces
+- `/` — fundamentals-positioned landing; the **dashboard is the hero/demo** (interactive
+  featured-company card), then capabilities, how-it-works, case study, monetization, roadmap, CTA.
+- `/fundamentals` — research terminal: indices strip + searchable/sortable company table
+  (PER / PBR / ROE / market cap) + watchlist filter.
+- `/fundamentals/[code]` — deep research page: header + price chart + financial summary +
+  ratio grid + valuation + risk summary.
+- `/market`, `/market/[code]` — redirect to the fundamentals equivalents.
 
-## 디자인 방향 (Design direction)
-- 에이전시급, 절제된 프리미엄 핀테크 룩. 90% 뉴트럴 + 단일 액센트.
-- Noto Sans KR(가변), Phosphor 아이콘(이모지 0), 8px 그리드.
-- 숫자 가독성: tabular-nums, 등락 색상 일관성.
-- 라이트 모드 기본. 부드러운 스크롤 등장 애니메이션, reduced-motion 존중.
+## Bilingual (KO / EN)
+KO default. Local TS dictionary + React context (no i18n packages), persisted to localStorage,
+instant toggle in the navbar. Hero, dashboard labels, finance terms, case study, monetization,
+roadmap, disclaimers, and section titles all translate.
 
-## 비완성 → 완성 (합격 기준은 PLAN.md 참조)
+## Prices (live, delayed)
+Stock **prices and price history are real, ~15-min delayed** via Yahoo Finance's public chart
+endpoint (no API key, no new package; built-in `fetch`, server-side, in-memory throttle, graceful
+fallback to labeled sample on any failure). Shown with a "지연 시세 / Delayed" status chip + last-updated
+time, auto-refreshing every 60s. **Financial statements/ratios remain sample** (OpenDART seam) and are
+labeled as such; PER/PBR/market-cap are re-derived from the live price on trailing EPS/BPS.
+
+## OpenDART-ready + safety
+`lib/data/opendart.ts` reads `OPENDART_API_KEY`; absent → labeled sample fundamentals from
+`lib/data/fundamentals.ts`. No network/paid API; key never hardcoded; `.env.example` documents it.
+A data-source badge ("샘플 데이터 / Sample" vs "실데이터 · OpenDART") shows everywhere. No new
+runtime packages; no payment processing; no real recommendations; no commit/push/deploy without approval.
+
+## Design
+Dark premium fintech: deep slate bg, single emerald accent, subtle gradients/glass, Inter +
+Noto Sans KR, Phosphor icons (zero emoji), 8px grid, mobile-first, reduced-motion respected.
+
+See PLAN.md for milestones + pass criteria.
