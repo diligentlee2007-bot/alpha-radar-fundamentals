@@ -4,6 +4,7 @@ import { ClipboardIcon, DownloadSimpleIcon, FilePdfIcon, SparkleIcon } from "@ph
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
+import { AlphaBird, alphaBirdSvg } from "@/components/studio/alpha-bird";
 import { SEED_BY_CODE, STOCK_SEEDS } from "@/lib/data/stocks";
 import { US_INDEX_FALLBACK } from "@/lib/data/us-markets";
 import { num, pct } from "@/lib/format";
@@ -203,6 +204,14 @@ export function StudioContent() {
         y = wrap(ctx, row.l, 80, y, W - 160, slide.big ? 66 : 56) + 30;
       }
     }
+    // mascot (rasterize the SVG onto the canvas)
+    try {
+      const bs = slide.big ? 340 : 150;
+      const bird = new Image();
+      bird.src = `data:image/svg+xml;utf8,${encodeURIComponent(alphaBirdSvg(bs))}`;
+      await bird.decode();
+      ctx.drawImage(bird, W - bs - 70, H - bs - 140, bs, bs);
+    } catch {}
     // footer
     ctx.fillStyle = "#6b7280";
     ctx.font = '500 24px Inter, "Noto Sans KR", sans-serif';
@@ -263,6 +272,13 @@ export function StudioContent() {
               {S.title}
             </h1>
             <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{S.subtitle}</p>
+            <div className="mt-3 flex items-center gap-2">
+              <AlphaBird size={40} />
+              <div>
+                <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
+                <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
+              </div>
+            </div>
           </div>
           <QuoteStatus source={source} fetchedAt={kr.fetchedAt ?? us.fetchedAt} />
         </div>
@@ -352,6 +368,12 @@ export function StudioContent() {
             {slides.map((s, i) => (
               <div key={s.kicker} className="flex flex-col">
                 <div className="relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                  <div
+                    className="pointer-events-none absolute opacity-90"
+                    style={s.big ? { bottom: 8, right: 8 } : { top: 8, right: 8 }}
+                  >
+                    <AlphaBird size={s.big ? 52 : 22} />
+                  </div>
                   <div>
                     <div className="h-1 w-8 rounded bg-[var(--color-accent)]" aria-hidden />
                     <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-700)]">

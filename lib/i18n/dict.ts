@@ -373,6 +373,7 @@ const en = {
     riskVol: "Volatility is elevated — manage risk and avoid chasing moves.",
     disclaimer: "Educational content · not investment advice · data delayed.",
     brand: "Alpha Radar Fundamentals",
+    bird: { name: "Alpha Bird", tagline: "Your daily market scout" },
   },
   finalCta: {
     title: "Open the terminal and read a company",
@@ -761,6 +762,7 @@ const ko: Dict = {
     riskVol: "변동성 확대 — 리스크 관리, 추격 매매 주의.",
     disclaimer: "교육용 콘텐츠 · 투자 자문 아님 · 시세 지연.",
     brand: "Alpha Radar Fundamentals",
+    bird: { name: "알파버드", tagline: "매일 아침 시장을 정찰하는 새" },
   },
   finalCta: {
     title: "터미널을 열고 기업을 읽어보세요",
