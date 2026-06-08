@@ -42,6 +42,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ market: string 
     const idx = Math.max(1, Math.min(cards.length, Number(preview) || 1)) - 1;
     const card = cards[idx];
     if (!card) return new Response("no card", { status: 404 });
+    // Debug: force a stand-in cover image to verify text compositing without a key.
+    if (url.searchParams.get("bgtest")) card.bgImageUrl = `${origin}/joosik-storm.png`;
     const png = await renderCardPng(card);
     return new Response(new Uint8Array(png), {
       headers: { "Content-Type": "image/png", "Cache-Control": "no-store" },

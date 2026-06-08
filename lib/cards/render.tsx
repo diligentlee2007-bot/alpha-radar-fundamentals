@@ -149,9 +149,7 @@ function CardEl(c: CardSpec): React.ReactElement {
         position: "relative",
         padding: 72,
         backgroundColor: t.css[2],
-        backgroundImage: illustrated
-          ? undefined
-          : `linear-gradient(155deg, ${t.css[0]}, ${t.css[1]} 52%, ${t.css[2]})`,
+        backgroundImage: `linear-gradient(155deg, ${t.css[0]}, ${t.css[1]} 52%, ${t.css[2]})`,
         color: "#f8fafc",
         fontFamily: "Pretendard",
         overflow: "hidden",
