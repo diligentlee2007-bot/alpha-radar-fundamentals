@@ -179,7 +179,9 @@ export function StudioContent() {
   const riskLine = volatile ? S.riskVol : S.riskCalm;
 
   const newsRows: Row[] = news.length
-    ? news.slice(0, 3).map((n) => ({ l: `${trunc(n.title, 64)} · ${n.publisher}` }))
+    ? news
+        .slice(0, 3)
+        .map((n) => ({ l: `[${US_NAME.get(n.symbol) ?? n.symbol}] ${trunc(n.title, 56)}` }))
     : [{ l: S.overnightEmpty }];
 
   const slides: Slide[] = [
@@ -448,7 +450,10 @@ export function StudioContent() {
                         aria-hidden
                       />
                       <span>
-                        {trunc(n.title, 60)}{" "}
+                        <span className="font-semibold text-[var(--color-fg)]">
+                          [{US_NAME.get(n.symbol) ?? n.symbol}]
+                        </span>{" "}
+                        {trunc(n.title, 56)}{" "}
                         <span className="text-[var(--color-accent-700)]">· {n.publisher}</span>
                       </span>
                     </a>
