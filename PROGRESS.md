@@ -12,7 +12,9 @@ Key added to `.env.local` (gitignored) and dev server restarted. **Real financia
 Note: the key was shared in chat; it can be re-issued at opendart.fss.or.kr if desired (read-only,
 rate-limited data — low risk).
 
-## Content Studio — daily brief + IG carousel (2026-06-08)
+## Content Studio + Alpha Bird mascot (2026-06-08)
+- Added **Alpha Bird (알파버드)** SVG mascot (code-drawn, no image API/package) to studio cards, header,
+  and rasterized into PNG export. Cute-but-clean brand character for the daily IG card-news.
 - New route **`/studio`** (+ nav "스튜디오/Studio"): auto-generates today's KR/US market brief and a
   **5-slide Instagram carousel** from live data (KR+US indices/FX + top movers). Outputs: brief text,
   caption + hashtags (copy buttons), **per-slide PNG download (Canvas, 1080×1350, no package)**, and
