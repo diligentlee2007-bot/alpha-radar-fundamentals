@@ -12,6 +12,15 @@ Key added to `.env.local` (gitignored) and dev server restarted. **Real financia
 Note: the key was shared in chat; it can be re-issued at opendart.fss.or.kr if desired (read-only,
 rate-limited data — low risk).
 
+## Content Studio — daily brief + IG carousel (2026-06-08)
+- New route **`/studio`** (+ nav "스튜디오/Studio"): auto-generates today's KR/US market brief and a
+  **5-slide Instagram carousel** from live data (KR+US indices/FX + top movers). Outputs: brief text,
+  caption + hashtags (copy buttons), **per-slide PNG download (Canvas, 1080×1350, no package)**, and
+  **Save-as-PDF** (print CSS). Human-in-the-loop — no auto-publishing. Bilingual KO/EN.
+- Deployed live + GitHub pushed. Verified: `/studio` 200 on the public URL, nav shows Studio.
+- Note: custom alias `alpha-radar-fundamentals.vercel.app` is re-pointed manually after each `vercel --prod`
+  (the auto production domain `kr-stock-dashboard-pi.vercel.app` always tracks latest).
+
 ## Global fix + domain + GitHub (2026-06-08)
 - **Global US bug fixed:** US index/FX strip had no fallback (KR did), so it rendered blank until the
   client poll resolved. Added `US_INDEX_FALLBACK` (labeled sample) + passed to `LiveIndexBar`. Now US
