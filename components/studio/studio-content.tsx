@@ -344,44 +344,56 @@ export function StudioContent() {
     ctx.fillText(today, W - 80, 92);
     ctx.textAlign = "left";
 
+    // kicker — filled accent pill (punchy thumbnail style)
+    ctx.font = '800 34px Inter, "Noto Sans KR", sans-serif';
+    const kText = slide.kicker.toUpperCase();
+    const kw = ctx.measureText(kText).width;
     ctx.fillStyle = T.accent;
-    roundRect(ctx, 80, 132, 72, 9, 4);
+    roundRect(ctx, 80, 150, kw + 60, 60, 18);
     ctx.fill();
-    ctx.fillStyle = T.accent;
-    ctx.font = '800 30px Inter, "Noto Sans KR", sans-serif';
-    ctx.fillText(slide.kicker.toUpperCase(), 80, 200);
+    ctx.fillStyle = "#0b1410";
+    ctx.fillText(kText, 110, 192);
 
-    ctx.fillStyle = "#f3f4f6";
-    ctx.font = `${slide.big ? "800 84px" : "800 60px"} Inter, "Noto Sans KR", sans-serif`;
-    wrap(ctx, slide.title, 80, slide.big ? 300 : 270, W - 380, slide.big ? 92 : 70);
+    // title — big & bold
+    ctx.fillStyle = "#f6f8f9";
+    ctx.font = `${slide.big ? "900 108px" : "800 70px"} Inter, "Noto Sans KR", sans-serif`;
+    const titleEnd = wrap(
+      ctx,
+      slide.title,
+      80,
+      slide.big ? 330 : 296,
+      W - 150,
+      slide.big ? 112 : 80,
+    );
 
-    let y = slide.big ? 560 : 440;
+    let y = slide.big ? titleEnd + 150 : 470;
     for (const row of slide.rows) {
       if (row.r) {
-        ctx.fillStyle = "#cbd5e1";
-        ctx.font = '600 42px Inter, "Noto Sans KR", sans-serif';
+        ctx.fillStyle = "#dbe2ea";
+        ctx.font = '700 48px Inter, "Noto Sans KR", sans-serif';
         ctx.textAlign = "left";
         ctx.fillText(row.l, 80, y);
-        ctx.font = '800 44px Inter, "Noto Sans KR", sans-serif';
+        ctx.font = '800 52px Inter, "Noto Sans KR", sans-serif';
         const tw = ctx.measureText(row.r).width;
-        const pad = 28;
+        const pad = 32;
         const pw = tw + pad * 2;
         const px = W - 80 - pw;
         ctx.fillStyle = toneSoft[row.tone ?? "flat"];
-        roundRect(ctx, px, y - 48, pw, 66, 18);
+        roundRect(ctx, px, y - 54, pw, 78, 20);
         ctx.fill();
         ctx.fillStyle = toneHex[row.tone ?? "flat"];
         ctx.fillText(row.r, px + pad, y);
-        y += 104;
+        y += 120;
       } else {
-        ctx.fillStyle = "#e5e7eb";
-        ctx.font = `${slide.big ? "700 54px" : "500 38px"} Inter, "Noto Sans KR", sans-serif`;
-        y = wrap(ctx, row.l, 80, y, W - 200, slide.big ? 70 : 52) + (slide.big ? 40 : 30);
+        ctx.fillStyle = "#eef2f5";
+        ctx.font = `${slide.big ? "900 76px" : "600 44px"} Inter, "Noto Sans KR", sans-serif`;
+        y = wrap(ctx, row.l, 80, y, W - 170, slide.big ? 92 : 60) + (slide.big ? 48 : 34);
       }
     }
 
+    // 주식이 — big, bottom-right, slight bleed (thumbnail hero)
     try {
-      const dh = slide.big ? 420 : 230;
+      const dh = slide.big ? 600 : 480;
       const dw = (dh * JOOSIK_BBOX.sw) / JOOSIK_BBOX.sh;
       const bird = new Image();
       bird.src = T.char;
@@ -392,8 +404,8 @@ export function StudioContent() {
         JOOSIK_BBOX.sy,
         JOOSIK_BBOX.sw,
         JOOSIK_BBOX.sh,
-        W - dw - 56,
-        H - dh - 124,
+        W - dw + 24,
+        H - dh - 70,
         dw,
         dh,
       );
@@ -572,7 +584,7 @@ export function StudioContent() {
                     className="pointer-events-none absolute opacity-95"
                     style={s.big ? { bottom: 6, right: 6 } : { top: 8, right: 8 }}
                   >
-                    <JoosikImg src={T.char} height={s.big ? 74 : 34} />
+                    <JoosikImg src={T.char} height={s.big ? 96 : 46} />
                   </div>
                   <div>
                     <div className="h-1 w-8 rounded" style={{ background: T.accent }} aria-hidden />
