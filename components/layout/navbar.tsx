@@ -18,6 +18,7 @@ export function Navbar() {
     { href: "/#how", label: d.nav.overview },
     { href: "/fundamentals", label: d.nav.terminal },
     { href: "/global", label: d.nav.global },
+    { href: "/studio", label: d.nav.studio },
     { href: "/#case-study", label: d.nav.caseStudy },
     { href: "/#roadmap", label: d.nav.future },
   ];

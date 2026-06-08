@@ -165,3 +165,23 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 75%);
   }
 }
+
+/* Save-as-PDF: print only the carousel slides */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-carousel,
+  .print-carousel * {
+    visibility: visible !important;
+  }
+  .print-carousel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+}
