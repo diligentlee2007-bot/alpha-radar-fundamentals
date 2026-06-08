@@ -4,7 +4,7 @@ import { ClipboardIcon, DownloadSimpleIcon, FilePdfIcon, SparkleIcon } from "@ph
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
-import { AlphaBird, alphaBirdSvg } from "@/components/studio/alpha-bird";
+import { Joosik, joosikSvg } from "@/components/studio/joosik";
 import { SEED_BY_CODE, STOCK_SEEDS } from "@/lib/data/stocks";
 import { US_INDEX_FALLBACK } from "@/lib/data/us-markets";
 import { num, pct } from "@/lib/format";
@@ -208,7 +208,7 @@ export function StudioContent() {
     try {
       const bs = slide.big ? 340 : 150;
       const bird = new Image();
-      bird.src = `data:image/svg+xml;utf8,${encodeURIComponent(alphaBirdSvg(bs))}`;
+      bird.src = `data:image/svg+xml;utf8,${encodeURIComponent(joosikSvg(bs, krTone))}`;
       await bird.decode();
       ctx.drawImage(bird, W - bs - 70, H - bs - 140, bs, bs);
     } catch {}
@@ -273,7 +273,7 @@ export function StudioContent() {
             </h1>
             <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{S.subtitle}</p>
             <div className="mt-3 flex items-center gap-2">
-              <AlphaBird size={40} />
+              <Joosik size={44} mood={krTone} />
               <div>
                 <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
                 <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
@@ -372,7 +372,7 @@ export function StudioContent() {
                     className="pointer-events-none absolute opacity-90"
                     style={s.big ? { bottom: 8, right: 8 } : { top: 8, right: 8 }}
                   >
-                    <AlphaBird size={s.big ? 52 : 22} />
+                    <Joosik size={s.big ? 54 : 24} mood={krTone} />
                   </div>
                   <div>
                     <div className="h-1 w-8 rounded bg-[var(--color-accent)]" aria-hidden />
