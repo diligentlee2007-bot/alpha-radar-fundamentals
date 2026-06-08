@@ -1,16 +1,23 @@
 /**
- * 주식이 — the user's hand-made mascot (public/joosik.png, transparent).
- * The artwork sits in the top-left of a 1380×1620 canvas, so we crop to its
- * content box via background-position (on screen) and drawImage source-rect
- * (canvas PNG export). Tweak BBOX if the crop needs nudging.
+ * 주식이 — the user's hand-made mascot, one image per mood (public/joosik-*.png).
+ * Each is an 840×960 transparent avatar with the character in the top-left and a
+ * small baked-in label at the bottom; we crop to the head-and-shoulders box (above
+ * the label) via background-position (UI) and drawImage source-rect (PNG export).
+ * Tweak JOOSIK_BBOX if the crop needs nudging.
  */
 
-export const JOOSIK_SRC = "/joosik.png";
-export const JOOSIK_FULL = { w: 1380, h: 1620 };
-// Content bounding box (top-left region) within the full image.
-export const JOOSIK_BBOX = { sx: 0, sy: 0, sw: 480, sh: 600 };
+export const JOOSIK_FULL = { w: 840, h: 960 };
+export const JOOSIK_BBOX = { sx: 0, sy: 0, sw: 330, sh: 312 };
 
-export function JoosikImg({ height = 56, className }: { height?: number; className?: string }) {
+export function JoosikImg({
+  src,
+  height = 56,
+  className,
+}: {
+  src: string;
+  height?: number;
+  className?: string;
+}) {
   const k = height / JOOSIK_BBOX.sh;
   return (
     <div
@@ -19,7 +26,7 @@ export function JoosikImg({ height = 56, className }: { height?: number; classNa
       style={{
         width: JOOSIK_BBOX.sw * k,
         height: JOOSIK_BBOX.sh * k,
-        backgroundImage: `url(${JOOSIK_SRC})`,
+        backgroundImage: `url(${src})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: `${JOOSIK_FULL.w * k}px ${JOOSIK_FULL.h * k}px`,
         backgroundPosition: `-${JOOSIK_BBOX.sx * k}px -${JOOSIK_BBOX.sy * k}px`,

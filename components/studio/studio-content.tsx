@@ -10,7 +10,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
-import { JOOSIK_BBOX, JOOSIK_SRC, JoosikImg } from "@/components/studio/joosik-img";
+import { JOOSIK_BBOX, JoosikImg } from "@/components/studio/joosik-img";
 import { SEED_BY_CODE, STOCK_SEEDS } from "@/lib/data/stocks";
 import { US_INDEX_FALLBACK, US_INSTRUMENTS, US_TICKERS } from "@/lib/data/us-markets";
 import { num, pct } from "@/lib/format";
@@ -384,7 +384,7 @@ export function StudioContent() {
       const dh = slide.big ? 420 : 230;
       const dw = (dh * JOOSIK_BBOX.sw) / JOOSIK_BBOX.sh;
       const bird = new Image();
-      bird.src = JOOSIK_SRC;
+      bird.src = T.char;
       await bird.decode();
       ctx.drawImage(
         bird,
@@ -435,7 +435,7 @@ export function StudioContent() {
             </h1>
             <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{S.subtitle}</p>
             <div className="mt-3 flex items-center gap-2">
-              <JoosikImg height={56} />
+              <JoosikImg src={T.char} height={64} />
               <div>
                 <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
                 <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
@@ -572,7 +572,7 @@ export function StudioContent() {
                     className="pointer-events-none absolute opacity-95"
                     style={s.big ? { bottom: 6, right: 6 } : { top: 8, right: 8 }}
                   >
-                    <JoosikImg height={s.big ? 64 : 30} />
+                    <JoosikImg src={T.char} height={s.big ? 74 : 34} />
                   </div>
                   <div>
                     <div className="h-1 w-8 rounded" style={{ background: T.accent }} aria-hidden />

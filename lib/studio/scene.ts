@@ -18,6 +18,8 @@ export interface Theme {
   decor: Decor;
   /** Which 주식이 expression to show. */
   mood: CharMood;
+  /** Mood character image (public/). */
+  char: string;
 }
 
 export function sceneOf(kospiPct: number): Scene {
@@ -35,6 +37,7 @@ export const THEMES: Record<Scene, Theme> = {
     accent: "#34d399",
     decor: "rocket",
     mood: "up",
+    char: "/joosik-up.png",
   },
   sunny: {
     css: ["#143329", "#15291f", "#101a14"],
@@ -42,6 +45,7 @@ export const THEMES: Record<Scene, Theme> = {
     accent: "#34d399",
     decor: "stars",
     mood: "up",
+    char: "/joosik-sunny.png",
   },
   flat: {
     css: ["#19241f", "#15171c", "#101216"],
@@ -49,6 +53,7 @@ export const THEMES: Record<Scene, Theme> = {
     accent: "#34d399",
     decor: "none",
     mood: "flat",
+    char: "/joosik-up.png",
   },
   cloudy: {
     css: ["#1b2230", "#171b24", "#10131a"],
@@ -56,6 +61,7 @@ export const THEMES: Record<Scene, Theme> = {
     accent: "#60a5fa",
     decor: "rain",
     mood: "down",
+    char: "/joosik-cloudy.png",
   },
   storm: {
     css: ["#231a2e", "#191726", "#0e0c16"],
@@ -63,5 +69,6 @@ export const THEMES: Record<Scene, Theme> = {
     accent: "#818cf8",
     decor: "rain",
     mood: "down",
+    char: "/joosik-storm.png",
   },
 };
