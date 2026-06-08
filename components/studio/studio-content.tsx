@@ -19,7 +19,7 @@ import { useLiveQuotes } from "@/lib/hooks/use-live-quotes";
 import { useNews } from "@/lib/hooks/use-news";
 import { useUsQuotes } from "@/lib/hooks/use-us-quotes";
 import { useI18n } from "@/lib/i18n/context";
-import { type Decor, JOOSIK_DESC, STYLE_DESC, sceneOf, THEMES } from "@/lib/studio/scene";
+import { type Decor, JOOSIK_DESC, sceneOf, THEMES } from "@/lib/studio/scene";
 import type { IndexQuote } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -243,7 +243,8 @@ export function StudioContent() {
   const riskLine = volatile ? S.riskVol : S.riskCalm;
 
   // Daily theme — background, accent, decor & 주식이 mood follow the market.
-  const T = THEMES[sceneOf(kospi?.changePct ?? 0)];
+  const sceneKey = sceneOf(kospi?.changePct ?? 0);
+  const T = THEMES[sceneKey];
 
   const newsRows: Row[] = news.length
     ? news
@@ -309,10 +310,28 @@ export function StudioContent() {
       : "#stocks #investing #KOSPI #Nasdaq #markets #finance #AlphaRadar";
   const caption = `${today} ${lang === "ko" ? "한국·미국 시장 한 줄 요약" : "Korea & US market in one line"}\n${headline}\n\n${news[0] ? `📰 ${trunc(news[0].title, 80)}\n\n` : ""}${S.disclaimer}\n\n${hashtags}`;
 
-  // AI illustration prompt — paste into an image AI to get a bespoke scene card.
-  const enCtx = `Korea KOSPI ${kospi ? pct(kospi.changePct) : "n/a"}, US Nasdaq ${nasdaq ? pct(nasdaq.changePct) : "n/a"}${news[0] ? `; top story: ${news[0].title}` : ""}`;
-  const imagePrompt = `Illustrate ${JOOSIK_DESC}, ${THEMES[sceneOf(kospi?.changePct ?? 0)].prompt}. ${STYLE_DESC}. Context: ${enCtx}. Important: do NOT draw any letters or text in the image — text is added separately.`;
-  const overlayText = `${headline}\n코스피 ${kospi ? pct(kospi.changePct) : "—"} · 나스닥 ${nasdaq ? pct(nasdaq.changePct) : "—"}${news[0] ? `\n📰 ${trunc(news[0].title, 56)}` : ""}`;
+  // Canva card prompt — paste into Canva AI (or ask to generate it via the connector).
+  const sceneWord = {
+    rocket: lang === "ko" ? "급등 랠리" : "rally",
+    sunny: lang === "ko" ? "반등" : "rebound",
+    flat: lang === "ko" ? "보합" : "flat",
+    cloudy: lang === "ko" ? "약세" : "weak",
+    storm: lang === "ko" ? "패닉셀" : "panic sell",
+  }[sceneKey];
+  const cardHeadline =
+    lang === "ko"
+      ? `코스피 ${kospi ? pct(kospi.changePct) : "—"} ${sceneWord}`
+      : `KOSPI ${kospi ? pct(kospi.changePct) : "—"} ${sceneWord}`;
+  const cardSub = `코스닥 ${kosdaq ? pct(kosdaq.changePct) : "—"} · 나스닥 ${nasdaq ? pct(nasdaq.changePct) : "—"} · 환율 ${fx ? num(fx.value) : "—"}원`;
+  const overlayText = cardHeadline;
+  const imagePrompt = `A dramatic Instagram card (1080x1350 portrait), KOREAN, finance card-news thumbnail style.
+THEME: today's Korean market — ${sceneWord} (KOSPI ${kospi ? pct(kospi.changePct) : "n/a"}).
+Scene (flat vector cartoon, bold clean outlines, vibrant): ${JOOSIK_DESC}, ${T.prompt}.
+TEXT on the card (Korean, big & bold at the TOP, high contrast):
+- Headline: "${cardHeadline}"
+- Sub: "${cardSub}"
+Top-left brand tag: "Alpha Radar · 주식이". Bottom tiny: "교육용 · 투자 자문 아님".${news[0] ? `\nToday's top story (for context): ${news[0].title}.` : ""}
+Eye-catching and scroll-stopping, ready to post on Instagram.`;
 
   async function downloadPng(slide: Slide, i: number) {
     const W = 1080;
