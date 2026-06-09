@@ -131,13 +131,10 @@ function decor(scene: Scene): React.ReactNode[] {
 function CardEl(c: CardSpec): React.ReactElement {
   const t = THEMES[c.scene];
   const accent = t.accent;
-  // The mood PNGs (840×960) embed the bull in a light rounded card in the
-  // top-left with a baked caption strip at the bottom. Crop tight to the
-  // head+torso (above the caption) and present it as an intentional sticker.
-  const BB = { sx: 14, sy: 34, sw: 258, sh: 226 };
-  const MH = 360; // displayed mascot height
-  const k = MH / BB.sh;
-  const mascotUrl = `${c.origin}${t.char}`;
+  // The 주식이 mascot (transparent full-body cutout) drawn bottom-right.
+  const mascotUrl = `${c.origin}/joosik-bull.png`;
+  const mascotH = 600;
+  const mascotW = Math.round((mascotH * 349) / 590);
   const illustrated = !!c.bgImageUrl;
   return (
     <div
@@ -304,30 +301,11 @@ function CardEl(c: CardSpec): React.ReactElement {
         </div>
       ) : null}
 
-      {/* mascot bottom-right (cropped to head & torso, framed as a sticker) —
-          only on flat designed cards; illustrated covers already contain the bull */}
+      {/* 주식이 mascot bottom-right; illustrated covers already contain the bull */}
       {illustrated ? null : (
-        <div
-          style={{
-            position: "absolute",
-            right: 60,
-            bottom: 150,
-            width: BB.sw * k,
-            height: MH,
-            overflow: "hidden",
-            display: "flex",
-            borderRadius: 30,
-            border: "1px solid rgba(148,163,184,0.22)",
-          }}
-        >
+        <div style={{ position: "absolute", right: 40, bottom: 96, display: "flex" }}>
           {/* biome-ignore lint/performance/noImgElement: og renderer requires raw img */}
-          <img
-            src={mascotUrl}
-            width={840 * k}
-            height={960 * k}
-            alt=""
-            style={{ position: "absolute", left: -(BB.sx * k), top: -(BB.sy * k) }}
-          />
+          <img src={mascotUrl} width={mascotW} height={mascotH} alt="" />
         </div>
       )}
 

@@ -11,7 +11,6 @@ import NextImage from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
-import { JOOSIK_BBOX, JoosikImg } from "@/components/studio/joosik-img";
 import { SEED_BY_CODE, STOCK_SEEDS } from "@/lib/data/stocks";
 import { US_INDEX_FALLBACK, US_INSTRUMENTS, US_TICKERS } from "@/lib/data/us-markets";
 import { num, pct } from "@/lib/format";
@@ -416,24 +415,14 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
       }
     }
 
-    // 주식이 — big, bottom-right, slight bleed (thumbnail hero)
+    // 주식이 (new mascot) — big, bottom-right, slight bleed (thumbnail hero)
     try {
-      const dh = slide.big ? 600 : 480;
-      const dw = (dh * JOOSIK_BBOX.sw) / JOOSIK_BBOX.sh;
+      const dh = slide.big ? 660 : 520;
+      const dw = (dh * 349) / 590;
       const bird = new Image();
-      bird.src = T.char;
+      bird.src = "/joosik-bull.png";
       await bird.decode();
-      ctx.drawImage(
-        bird,
-        JOOSIK_BBOX.sx,
-        JOOSIK_BBOX.sy,
-        JOOSIK_BBOX.sw,
-        JOOSIK_BBOX.sh,
-        W - dw + 24,
-        H - dh - 70,
-        dw,
-        dh,
-      );
+      ctx.drawImage(bird, W - dw + 18, H - dh - 56, dw, dh);
     } catch {}
 
     ctx.textAlign = "left";
@@ -471,12 +460,9 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
               {S.title}
             </h1>
             <p className="mt-2 max-w-2xl text-[var(--color-muted)]">{S.subtitle}</p>
-            <div className="mt-3 flex items-center gap-2">
-              <JoosikImg src={T.char} height={64} />
-              <div>
-                <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
-                <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
-              </div>
+            <div className="mt-3">
+              <p className="text-sm font-semibold text-[var(--color-fg-strong)]">{S.bird.name}</p>
+              <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
             </div>
           </div>
           <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
@@ -645,10 +631,16 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
                   }}
                 >
                   <div
-                    className="pointer-events-none absolute opacity-95"
-                    style={s.big ? { bottom: 6, right: 6 } : { top: 8, right: 8 }}
+                    className="pointer-events-none absolute"
+                    style={s.big ? { bottom: 0, right: 4 } : { top: 6, right: 6 }}
                   >
-                    <JoosikImg src={T.char} height={s.big ? 96 : 46} />
+                    <NextImage
+                      src="/joosik-bull.png"
+                      alt="주식이"
+                      width={349}
+                      height={590}
+                      className={s.big ? "h-40 w-auto drop-shadow-lg" : "h-16 w-auto"}
+                    />
                   </div>
                   <div>
                     <div className="h-1 w-8 rounded" style={{ background: T.accent }} aria-hidden />
