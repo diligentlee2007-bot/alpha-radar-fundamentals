@@ -376,12 +376,12 @@ const en = {
     riskVol: "Volatility is elevated — manage risk and avoid chasing moves.",
     disclaimer: "Educational content · not investment advice · data delayed.",
     brand: "Alpha Radar Fundamentals",
-    aiTitle: "Canva card prompt (daily)",
+    aiTitle: "GPT image prompt (daily)",
     aiNote:
-      "Copy this into Canva AI to generate today's illustrated scene card — or just ask the assistant 'make today's card' to generate it via the connected Canva. Then tweak the text/colors and post.",
-    promptLabel: "Canva prompt → paste into Canva",
+      "Paste this into ChatGPT to generate today's illustrated card, then post it. The same brief — why the market moved, headlines, and this prompt — is emailed to you automatically after each market close.",
+    promptLabel: "GPT prompt → paste into ChatGPT",
     overlayLabel: "Headline",
-    copyPrompt: "Copy Canva prompt",
+    copyPrompt: "Copy GPT prompt",
     bird: { name: "주식이 (Joosik)", tagline: "Your daily market buddy" },
   },
   finalCta: {
@@ -774,12 +774,12 @@ const ko: Dict = {
     riskVol: "변동성 확대 — 리스크 관리, 추격 매매 주의.",
     disclaimer: "교육용 콘텐츠 · 투자 자문 아님 · 시세 지연.",
     brand: "Alpha Radar Fundamentals",
-    aiTitle: "Canva 카드 프롬프트 (매일)",
+    aiTitle: "GPT 이미지 프롬프트 (매일)",
     aiNote:
-      "이걸 복사해 Canva AI에 붙여 오늘의 일러스트 카드를 만드세요 — 또는 저한테 '오늘 카드 만들어줘' 하면 연결된 Canva로 바로 생성해드려요. 그다음 글자·색만 다듬어 올리면 끝.",
-    promptLabel: "Canva 프롬프트 → Canva에 붙여넣기",
+      "이 프롬프트를 ChatGPT에 붙여넣으면 오늘의 일러스트 카드가 만들어져요. 똑같은 브리핑(왜 움직였나 · 뉴스 · 이 프롬프트)이 매일 장 마감 후 자동으로 이메일로도 옵니다 — 메일 보고 GPT에 붙여 인스타에 올리면 끝.",
+    promptLabel: "GPT 프롬프트 → ChatGPT에 붙여넣기",
     overlayLabel: "헤드라인",
-    copyPrompt: "Canva 프롬프트 복사",
+    copyPrompt: "GPT 프롬프트 복사",
     bird: { name: "주식이", tagline: "매일 아침 시장을 알려주는 친구" },
   },
   finalCta: {

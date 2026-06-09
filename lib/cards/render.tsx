@@ -131,10 +131,6 @@ function decor(scene: Scene): React.ReactNode[] {
 function CardEl(c: CardSpec): React.ReactElement {
   const t = THEMES[c.scene];
   const accent = t.accent;
-  // The 주식이 mascot (transparent full-body cutout) drawn bottom-right.
-  const mascotUrl = `${c.origin}/joosik-bull.png`;
-  const mascotH = 600;
-  const mascotW = Math.round((mascotH * 349) / 590);
   const illustrated = !!c.bgImageUrl;
   return (
     <div
@@ -300,14 +296,6 @@ function CardEl(c: CardSpec): React.ReactElement {
           ))}
         </div>
       ) : null}
-
-      {/* 주식이 mascot bottom-right; illustrated covers already contain the bull */}
-      {illustrated ? null : (
-        <div style={{ position: "absolute", right: 40, bottom: 96, display: "flex" }}>
-          {/* biome-ignore lint/performance/noImgElement: og renderer requires raw img */}
-          <img src={mascotUrl} width={mascotW} height={mascotH} alt="" />
-        </div>
-      )}
 
       {/* footer */}
       <div

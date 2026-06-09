@@ -7,7 +7,6 @@ import {
   FilePdfIcon,
   SparkleIcon,
 } from "@phosphor-icons/react";
-import NextImage from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
@@ -415,16 +414,6 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
       }
     }
 
-    // 주식이 (new mascot) — big, bottom-right, slight bleed (thumbnail hero)
-    try {
-      const dh = slide.big ? 660 : 520;
-      const dw = (dh * 349) / 590;
-      const bird = new Image();
-      bird.src = "/joosik-bull.png";
-      await bird.decode();
-      ctx.drawImage(bird, W - dw + 18, H - dh - 56, dw, dh);
-    } catch {}
-
     ctx.textAlign = "left";
     ctx.fillStyle = "#8b95a3";
     ctx.font = '600 26px Inter, "Noto Sans KR", sans-serif';
@@ -465,17 +454,7 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
               <p className="text-xs text-[var(--color-muted)]">{S.bird.tagline}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
-            <QuoteStatus source={source} fetchedAt={kr.fetchedAt ?? us.fetchedAt} />
-            <NextImage
-              src="/joosik-bull.png"
-              alt="주식이"
-              width={349}
-              height={590}
-              priority
-              className="h-28 w-auto drop-shadow-xl sm:h-44"
-            />
-          </div>
+          <QuoteStatus source={source} fetchedAt={kr.fetchedAt ?? us.fetchedAt} />
         </div>
       </Reveal>
 
@@ -630,18 +609,6 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
                     backgroundImage: `linear-gradient(to bottom, ${T.css[0]}, ${T.css[1]}, ${T.css[2]})`,
                   }}
                 >
-                  <div
-                    className="pointer-events-none absolute"
-                    style={s.big ? { bottom: 0, right: 4 } : { top: 6, right: 6 }}
-                  >
-                    <NextImage
-                      src="/joosik-bull.png"
-                      alt="주식이"
-                      width={349}
-                      height={590}
-                      className={s.big ? "h-40 w-auto drop-shadow-lg" : "h-16 w-auto"}
-                    />
-                  </div>
                   <div>
                     <div className="h-1 w-8 rounded" style={{ background: T.accent }} aria-hidden />
                     <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-700)]">
