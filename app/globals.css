@@ -1,43 +1,43 @@
 /* ---------------------------------------------------------------------------
    Alpha Radar — design tokens (Tailwind v4, CSS-first @theme).
-   Dark premium fintech. One emerald accent + a cool slate neutral scale.
-   Market direction (international): up=green, down=red, flat=muted.
+   Light, premium, friendly. One confident emerald-green accent + a clean cool
+   neutral scale. Market direction (international): up=green, down=red, flat=muted.
 --------------------------------------------------------------------------- */
 
 @import "tailwindcss";
 
 @theme {
-  /* ---- Brand accent: refined emerald/teal ---- */
-  --color-accent-50: oklch(0.27 0.04 168); /* dark translucent chip bg */
-  --color-accent-100: oklch(0.33 0.06 168); /* chip border */
-  --color-accent-200: oklch(0.42 0.09 168);
-  --color-accent-400: oklch(0.66 0.13 168);
-  --color-accent: oklch(0.74 0.14 168); /* primary buttons / brand mark */
-  --color-accent-600: oklch(0.7 0.14 168); /* hover */
-  --color-accent-700: oklch(0.83 0.11 168); /* accent TEXT on dark */
+  /* ---- Brand accent: confident emerald green (mascot suit / CTAs) ---- */
+  --color-accent-50: oklch(0.96 0.03 156); /* light green chip bg */
+  --color-accent-100: oklch(0.92 0.05 156); /* light green border */
+  --color-accent-200: oklch(0.86 0.07 156); /* selection / soft border */
+  --color-accent-400: oklch(0.68 0.14 156);
+  --color-accent: oklch(0.6 0.15 156); /* primary buttons / brand mark */
+  --color-accent-600: oklch(0.54 0.14 156); /* hover (darker) */
+  --color-accent-700: oklch(0.47 0.13 156); /* accent TEXT on light */
 
   /* ---- Market direction ---- */
-  --color-up: oklch(0.78 0.15 158); /* gains — green */
-  --color-up-soft: oklch(0.3 0.05 158);
-  --color-down: oklch(0.68 0.18 22); /* losses — red */
-  --color-down-soft: oklch(0.32 0.06 22);
-  --color-flat: oklch(0.66 0.02 255);
+  --color-up: oklch(0.57 0.15 158); /* gains — green */
+  --color-up-soft: oklch(0.93 0.05 158);
+  --color-down: oklch(0.57 0.2 25); /* losses — red */
+  --color-down-soft: oklch(0.94 0.04 25);
+  --color-flat: oklch(0.55 0.02 255);
 
   /* ---- Semantic icon colors (Phosphor) ---- */
-  --color-info: oklch(0.74 0.13 240);
-  --color-success: oklch(0.78 0.15 158);
-  --color-warning: oklch(0.82 0.14 80);
-  --color-danger: oklch(0.7 0.18 22);
+  --color-info: oklch(0.55 0.15 250);
+  --color-success: oklch(0.57 0.15 158);
+  --color-warning: oklch(0.64 0.14 72);
+  --color-danger: oklch(0.57 0.2 25);
 
-  /* ---- Neutral scale (cool slate, dark) ---- */
-  --color-bg: oklch(0.17 0.012 256);
-  --color-surface: oklch(0.21 0.014 256);
-  --color-surface-2: oklch(0.25 0.015 256);
-  --color-border: oklch(0.29 0.014 256);
-  --color-border-strong: oklch(0.37 0.018 256);
-  --color-muted: oklch(0.68 0.018 256);
-  --color-fg: oklch(0.93 0.008 256);
-  --color-fg-strong: oklch(0.98 0.004 256);
+  /* ---- Neutral scale (cool, light) ---- */
+  --color-bg: oklch(0.985 0.004 196); /* faint cool off-white page */
+  --color-surface: oklch(1 0 0); /* white cards */
+  --color-surface-2: oklch(0.966 0.006 196); /* nested / subtle fill */
+  --color-border: oklch(0.91 0.005 220);
+  --color-border-strong: oklch(0.84 0.008 220);
+  --color-muted: oklch(0.5 0.015 245); /* muted text */
+  --color-fg: oklch(0.33 0.02 250); /* body text */
+  --color-fg-strong: oklch(0.22 0.02 250); /* headings */
 
   /* ---- Fonts ---- */
   --font-sans: var(--font-inter), var(--font-noto), system-ui, sans-serif;
@@ -65,9 +65,9 @@
   --radius-lg: 1.25rem;
   --radius-xl: 1.75rem;
 
-  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 30px oklch(0 0 0 / 0.35);
-  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.4), 0 24px 60px oklch(0 0 0 / 0.5);
-  --shadow-glow: 0 0 0 1px oklch(0.74 0.14 168 / 0.2), 0 16px 50px oklch(0.74 0.14 168 / 0.12);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.05), 0 10px 30px oklch(0.45 0.05 220 / 0.08);
+  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.06), 0 26px 60px oklch(0.45 0.05 220 / 0.13);
+  --shadow-glow: 0 0 0 1px oklch(0.6 0.15 156 / 0.22), 0 18px 50px oklch(0.6 0.15 156 / 0.18);
 }
 
 @layer base {
@@ -98,7 +98,7 @@
     color: var(--color-fg-strong);
   }
 
-  /* Custom scrollbar (subtle, dark) */
+  /* Custom scrollbar (subtle, light) */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -128,20 +128,20 @@
     text-wrap: pretty;
   }
 
-  /* Subtle glass panel for premium dark cards */
+  /* Frosted white panel for premium light cards */
   .glass {
-    background: color-mix(in oklch, var(--color-surface) 78%, transparent);
+    background: color-mix(in oklch, var(--color-surface) 72%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
   }
 
-  /* Emerald gradient text for accents in headlines */
+  /* Green→ink gradient text for headline accents */
   .text-gradient {
     background: linear-gradient(
       100deg,
       var(--color-fg-strong) 0%,
-      var(--color-accent-700) 60%,
+      var(--color-accent-700) 55%,
       var(--color-accent) 100%
     );
     -webkit-background-clip: text;
@@ -149,11 +149,11 @@
     color: transparent;
   }
 
-  /* Hero ambient glow */
+  /* Hero ambient glow (soft green on light) */
   .radial-glow {
     background:
-      radial-gradient(60% 50% at 50% 0%, oklch(0.74 0.14 168 / 0.16) 0%, transparent 70%),
-      radial-gradient(40% 40% at 85% 10%, oklch(0.6 0.12 250 / 0.12) 0%, transparent 70%);
+      radial-gradient(60% 50% at 50% 0%, oklch(0.6 0.15 156 / 0.12) 0%, transparent 70%),
+      radial-gradient(42% 42% at 85% 8%, oklch(0.6 0.12 230 / 0.08) 0%, transparent 70%);
   }
 
   /* Faint grid backdrop */
