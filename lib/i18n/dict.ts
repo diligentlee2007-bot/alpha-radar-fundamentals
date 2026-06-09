@@ -325,22 +325,41 @@ const en = {
   },
   future: {
     eyebrow: "Roadmap",
-    title: "Planned extensions",
+    title: "Shipped & next",
     subtitle:
-      "Future directions that reuse the same analysis engine. These are not built yet — they show where the project is headed.",
-    badge: "Future",
+      "Built on top of the Korea fundamentals core. Several roadmap items are already live; here's what's done and what's next.",
+    shippedBadge: "Live",
+    plannedBadge: "Next",
     items: [
       {
+        status: "shipped",
         title: "Live OpenDART integration",
-        text: "Connect a real OpenDART API key to pull actual filed statements, with peer comparison and quarterly data.",
+        text: "Real filed financials (ROE / PER / PBR, 3-year trends) pulled from OpenDART for mapped tickers.",
       },
       {
-        title: "Exportable PDF reports",
+        status: "shipped",
+        title: "Daily auto card-news email",
+        text: "After each market close, a brief — why the market moved, headlines, and a ready GPT image prompt + cards — is generated and emailed automatically.",
+      },
+      {
+        status: "shipped",
+        title: "Global markets layer",
+        text: "40 US names grouped by sector with search, live US indices / FX, and an auto-refreshing news strip.",
+      },
+      {
+        status: "planned",
+        title: "Per-company PDF report",
         text: "One-click export of a clean, branded research report for each company.",
       },
       {
-        title: "Korean finance Shorts pipeline",
-        text: "Generate a 45-second Korean finance Shorts script and a vertical data-card storyboard from the same analysis.",
+        status: "planned",
+        title: "Korean news source",
+        text: "Add Naver / Korean-language headlines for sharper local context.",
+      },
+      {
+        status: "planned",
+        title: "AI illustration auto-gen",
+        text: "Optional paid image model to render the daily card illustration server-side, end to end.",
       },
     ],
   },
@@ -723,22 +742,41 @@ const ko: Dict = {
   },
   future: {
     eyebrow: "로드맵",
-    title: "예정된 확장",
+    title: "완료 & 다음",
     subtitle:
-      "동일한 분석 엔진을 재사용하는 향후 방향입니다. 아직 구현되지 않았으며 프로젝트의 지향점을 보여줍니다.",
-    badge: "예정",
+      "한국 펀더멘털 코어 위에 쌓아 올린 기능들. 로드맵 항목 일부는 이미 라이브이고, 아래는 완료된 것과 다음 단계입니다.",
+    shippedBadge: "완료",
+    plannedBadge: "예정",
     items: [
       {
-        title: "실 OpenDART 연동",
-        text: "실제 OpenDART API 키를 연결해 제출된 재무제표를 불러오고, 동종업계 비교와 분기 데이터를 추가합니다.",
+        status: "shipped",
+        title: "OpenDART 실시간 연동",
+        text: "매핑된 종목은 OpenDART에서 실제 제출 재무제표(ROE·PER·PBR, 3년 추이)를 불러옵니다.",
       },
       {
-        title: "PDF 리포트 내보내기",
-        text: "종목별 깔끔한 브랜드 리서치 리포트를 한 번에 내보냅니다.",
+        status: "shipped",
+        title: "데일리 자동 카드뉴스 이메일",
+        text: "장 마감마다 '왜 움직였나 · 뉴스 · 바로 쓰는 GPT 프롬프트 + 카드'가 자동 생성돼 이메일로 발송됩니다.",
       },
       {
-        title: "한국 금융 숏폼 파이프라인",
-        text: "같은 분석으로 45초 한국 금융 숏폼 스크립트와 세로형 데이터 카드 스토리보드를 생성합니다.",
+        status: "shipped",
+        title: "글로벌 마켓 레이어",
+        text: "미국 40종목을 섹터별로 + 검색, 실시간 미국 지수·환율, 자동 갱신 뉴스 스트립.",
+      },
+      {
+        status: "planned",
+        title: "종목별 PDF 리포트",
+        text: "종목마다 깔끔한 브랜드 리서치 리포트를 한 번에 내보내기.",
+      },
+      {
+        status: "planned",
+        title: "한국 뉴스 소스",
+        text: "네이버 등 한국어 헤드라인을 붙여 국내 맥락을 더 정확하게.",
+      },
+      {
+        status: "planned",
+        title: "AI 일러스트 자동 생성",
+        text: "유료 이미지 모델을 붙이면 데일리 카드 일러스트를 서버에서 끝까지 자동 생성.",
       },
     ],
   },
