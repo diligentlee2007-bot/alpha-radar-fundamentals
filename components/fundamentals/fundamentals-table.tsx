@@ -41,7 +41,9 @@ export function FundamentalsTable({ rows }: { rows: TerminalRow[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("marketCap");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
   const [watchOnly, setWatchOnly] = useState(false);
+  const [sector, setSector] = useState("전체");
 
+  const sectors = useMemo(() => ["전체", ...new Set(rows.map((r) => r.sector))], [rows]);
   const allCodes = useMemo(() => rows.map((r) => r.code), [rows]);
   const live = useLiveQuotes(allCodes);
 
@@ -84,6 +86,7 @@ export function FundamentalsTable({ rows }: { rows: TerminalRow[] }) {
     }
     if (term)
       list = list.filter((r) => r.name.toLowerCase().includes(term) || r.code.includes(term));
+    if (sector !== "전체") list = list.filter((r) => r.sector === sector);
     return [...list].sort((a, b) => {
       const av = sortKey === "name" ? a.name : a[sortKey];
       const bv = sortKey === "name" ? b.name : b[sortKey];
@@ -92,7 +95,7 @@ export function FundamentalsTable({ rows }: { rows: TerminalRow[] }) {
       }
       return dir === "asc" ? (av as number) - (bv as number) : (bv as number) - (av as number);
     });
-  }, [liveRows, q, sortKey, dir, watchOnly, codes]);
+  }, [liveRows, q, sortKey, dir, watchOnly, codes, sector]);
 
   const onSort = (key: SortKey) => {
     if (key === sortKey) setDir((p) => (p === "asc" ? "desc" : "asc"));
@@ -104,40 +107,63 @@ export function FundamentalsTable({ rows }: { rows: TerminalRow[] }) {
 
   return (
     <div className="overflow-hidden rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-soft)]">
-      <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-4 py-3">
-        <MagnifyingGlassIcon className="size-4 text-[var(--color-muted)]" aria-hidden />
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={d.terminal.search}
-          aria-label={d.terminal.search}
-          className="w-full bg-transparent text-sm text-[var(--color-fg)] placeholder:text-[var(--color-muted)] focus:outline-none"
-        />
-        <button
-          type="button"
-          onClick={() => setWatchOnly((v) => !v)}
-          aria-pressed={watchOnly}
-          className={cn(
-            "inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] border px-2.5 py-1.5 text-xs font-medium transition-colors",
-            watchOnly
-              ? "border-[var(--color-accent-100)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]"
-              : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-fg)]",
-          )}
-        >
-          <StarIcon weight={watchOnly ? "fill" : "regular"} className="size-3.5" aria-hidden />
-          <span className="hidden sm:inline">
-            {watchOnly ? d.terminal.showAll : d.terminal.watchlistOnly}
+      <div className="flex flex-col gap-3 border-b border-[var(--color-border)] px-4 py-3">
+        <div className="flex items-center gap-2">
+          <MagnifyingGlassIcon className="size-4 text-[var(--color-muted)]" aria-hidden />
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={d.terminal.search}
+            aria-label={d.terminal.search}
+            className="w-full bg-transparent text-sm text-[var(--color-fg)] placeholder:text-[var(--color-muted)] focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => setWatchOnly((v) => !v)}
+            aria-pressed={watchOnly}
+            className={cn(
+              "inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] border px-2.5 py-1.5 text-xs font-medium transition-colors",
+              watchOnly
+                ? "border-[var(--color-accent-100)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]"
+                : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-fg)]",
+            )}
+          >
+            <StarIcon weight={watchOnly ? "fill" : "regular"} className="size-3.5" aria-hidden />
+            <span className="hidden sm:inline">
+              {watchOnly ? d.terminal.showAll : d.terminal.watchlistOnly}
+            </span>
+          </button>
+          <QuoteStatus
+            source={live.source}
+            fetchedAt={live.fetchedAt}
+            className="hidden shrink-0 sm:inline-flex"
+          />
+          <span className="tnum hidden shrink-0 text-xs text-[var(--color-muted)] sm:block">
+            {filtered.length} {d.terminal.count}
           </span>
-        </button>
-        <QuoteStatus
-          source={live.source}
-          fetchedAt={live.fetchedAt}
-          className="hidden shrink-0 sm:inline-flex"
-        />
-        <span className="tnum hidden shrink-0 text-xs text-[var(--color-muted)] sm:block">
-          {filtered.length} {d.terminal.count}
-        </span>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5">
+          {sectors.map((s) => {
+            const active = s === sector;
+            return (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setSector(s)}
+                className={cn(
+                  "rounded-full px-3 py-1 text-xs font-semibold transition-colors",
+                  active
+                    ? "bg-[var(--color-accent)] text-white"
+                    : "bg-[var(--color-surface-2)] text-[var(--color-muted)] hover:text-[var(--color-fg-strong)]",
+                )}
+              >
+                {s}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="overflow-x-auto">
