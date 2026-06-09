@@ -7,6 +7,7 @@ import {
   FilePdfIcon,
   SparkleIcon,
 } from "@phosphor-icons/react";
+import NextImage from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { QuoteStatus } from "@/components/fundamentals/quote-status";
 import { Reveal } from "@/components/motion/reveal";
@@ -478,7 +479,17 @@ Eye-catching and scroll-stopping, ready to post on Instagram.`;
               </div>
             </div>
           </div>
-          <QuoteStatus source={source} fetchedAt={kr.fetchedAt ?? us.fetchedAt} />
+          <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
+            <QuoteStatus source={source} fetchedAt={kr.fetchedAt ?? us.fetchedAt} />
+            <NextImage
+              src="/joosik-bull.png"
+              alt="주식이"
+              width={349}
+              height={590}
+              priority
+              className="h-28 w-auto drop-shadow-xl sm:h-44"
+            />
+          </div>
         </div>
       </Reveal>
 

@@ -2,6 +2,7 @@
 
 import { GlobeHemisphereWestIcon, InfoIcon } from "@phosphor-icons/react";
 import { LiveIndexBar } from "@/components/market/live-index-bar";
+import { NewsStrip } from "@/components/market/news-strip";
 import { UsMarketTable } from "@/components/market/us-market-table";
 import { Reveal } from "@/components/motion/reveal";
 import { US_INDEX_FALLBACK } from "@/lib/data/us-markets";
@@ -38,11 +39,23 @@ export function GlobalContent() {
       </div>
 
       <Reveal>
-        <div className="mt-8">
-          <h2 className="mb-3 text-sm font-semibold text-[var(--color-fg-strong)]">
-            {G.watchlist}
-          </h2>
-          <UsMarketTable />
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <h2 className="mb-3 text-sm font-semibold text-[var(--color-fg-strong)]">
+              {G.watchlist}
+            </h2>
+            <UsMarketTable />
+          </div>
+          <div>
+            <h2 className="mb-3 text-sm font-semibold text-[var(--color-fg-strong)]">
+              미국 마켓 뉴스
+            </h2>
+            <NewsStrip
+              symbols={["^IXIC", "AAPL", "NVDA", "TSLA", "MSFT", "AMZN"]}
+              title="오버나잇 헤드라인"
+              limit={7}
+            />
+          </div>
         </div>
       </Reveal>
     </div>
