@@ -2,6 +2,7 @@
 
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { FundamentalsDemo } from "@/components/fundamentals/fundamentals-demo";
 import { ButtonLink } from "@/components/ui/button";
 import type { CompanyFundamentals } from "@/lib/data/fundamentals";
@@ -80,9 +81,32 @@ export function Hero({ companies }: { companies: CompanyFundamentals[] }) {
           initial={reduce ? false : { opacity: 0, y: 24, scale: 0.98 }}
           animate={reduce ? undefined : { opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
         >
-          <FundamentalsDemo companies={companies} />
-          <p className="mt-3 text-center text-xs text-[var(--color-muted)]">{d.hero.demoHint}</p>
+          {/* soft glow behind the mascot */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-4 -z-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full opacity-70 lg:left-auto lg:right-0 lg:translate-x-0"
+            style={{
+              background: "radial-gradient(closest-side, var(--color-accent-50), transparent 72%)",
+            }}
+            aria-hidden
+          />
+
+          {/* mascot — 주식이 */}
+          <Image
+            src="/joosik-bull.png"
+            alt="Alpha Radar 마스코트 주식이"
+            width={349}
+            height={590}
+            priority
+            className="relative z-0 mx-auto h-[360px] w-auto drop-shadow-2xl sm:h-[440px] lg:ml-auto lg:mr-0 lg:h-[560px]"
+          />
+
+          {/* floating live data card (overlaps the mascot like the concept) */}
+          <div className="relative z-10 -mt-16 sm:-mt-24 lg:absolute lg:bottom-2 lg:left-0 lg:mt-0 lg:w-[380px] xl:w-[420px]">
+            <FundamentalsDemo companies={companies} />
+            <p className="mt-3 text-center text-xs text-[var(--color-muted)]">{d.hero.demoHint}</p>
+          </div>
         </motion.div>
       </div>
     </section>
