@@ -1,3 +1,4 @@
+import { buildMarketBrief } from "@/lib/cards/brief";
 import { buildCards } from "@/lib/cards/build";
 import { renderCardPng } from "@/lib/cards/render";
 import { resendConfigured, sendEmail } from "@/lib/email/resend";
@@ -65,12 +66,43 @@ export async function GET(req: Request, ctx: { params: Promise<{ market: string 
     content: png.toString("base64"),
   }));
 
+  // Rich "content brief": why the market moved + headlines + a paste-ready GPT prompt.
+  const brief = await buildMarketBrief(market);
+  const esc = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const analysisHtml = esc(brief.analysis).replace(/\n/g, "<br>");
+  const newsHtml =
+    brief.headlines
+      .map(
+        (n) =>
+          `<li style="margin:6px 0"><a href="${n.link}" style="color:#0f7a4d;text-decoration:none">${esc(n.title)}</a> <span style="color:#94a3b8">· ${esc(n.publisher)}</span></li>`,
+      )
+      .join("") || "<li style='color:#94a3b8'>표시할 뉴스가 없어요.</li>";
+
   const html = `
-    <div style="font-family:Pretendard,Apple SD Gothic Neo,sans-serif;max-width:560px;margin:0 auto">
-      <h2 style="margin:0 0 4px">Alpha Radar · 주식이</h2>
-      <p style="color:#475569;margin:0 0 16px">${today} ${label} 카드뉴스 ${cards.length}장이 준비됐어요.</p>
-      <p style="color:#334155">첨부된 PNG ${cards.length}장을 인스타그램 캐러셀로 올리면 됩니다. 순서: 표지 → 지수 → 종목 → 이슈 → 마무리.</p>
-      <p style="color:#94a3b8;font-size:13px;margin-top:24px">자동 생성 · 교육용 콘텐츠이며 투자 자문이 아닙니다. · alpha-radar-fundamentals.vercel.app</p>
+    <div style="font-family:Pretendard,Apple SD Gothic Neo,sans-serif;max-width:600px;margin:0 auto;color:#1f2937">
+      <h2 style="margin:0 0 2px">Alpha Radar · 주식이</h2>
+      <p style="color:#6b7280;margin:0 0 18px;font-size:14px">${today} · ${label} 데일리 브리핑</p>
+
+      <div style="background:#0f1729;color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:18px">
+        <div style="font-size:22px;font-weight:800">${esc(brief.headline)}</div>
+        <div style="color:#9aa7bd;margin-top:4px">${esc(brief.sub)}</div>
+      </div>
+
+      <h3 style="margin:0 0 6px;font-size:16px">📊 오늘 왜 이렇게 움직였나</h3>
+      <div style="background:#f6f8fa;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.6;color:#374151">${analysisHtml}</div>
+
+      <h3 style="margin:18px 0 6px;font-size:16px">📰 핵심 뉴스</h3>
+      <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.5">${newsHtml}</ul>
+
+      <h3 style="margin:18px 0 6px;font-size:16px">🤖 GPT에 붙여넣기 (이미지 카드 만들기)</h3>
+      <p style="color:#6b7280;font-size:13px;margin:0 0 6px">아래를 복사해 ChatGPT에 붙여넣으면 오늘의 카드 이미지를 만들어줘요.</p>
+      <pre style="white-space:pre-wrap;background:#0f1729;color:#e8eef7;border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.55;font-family:Pretendard,monospace">${esc(brief.gptPrompt)}</pre>
+
+      <h3 style="margin:18px 0 6px;font-size:16px">🖼️ 바로 쓰는 카드 ${cards.length}장</h3>
+      <p style="color:#374151;font-size:14px;margin:0">첨부된 PNG ${cards.length}장(표지→지수→종목→이슈→마무리)을 그대로 인스타 캐러셀로 올려도 돼요.</p>
+
+      <p style="color:#9ca3af;font-size:12px;margin-top:22px">자동 생성 · 교육용 콘텐츠이며 투자 자문이 아닙니다. · alpha-radar-fundamentals.vercel.app</p>
     </div>`;
 
   if (!resendConfigured()) {
